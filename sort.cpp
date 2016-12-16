@@ -116,6 +116,38 @@ void SelectionSort::sortArray()
     return;
 }
 
+/* Insertion sort */
+class InsertionSort : public Sort
+{
+    public:
+        InsertionSort(int n) : Sort(n)
+        {
+            cout << "Initializing the array size in Insertion sort constructor\n";
+        }
+        void sortArray();
+        ~InsertionSort()
+        {
+            cout << "Insertion sort destructor\n";
+        }
+};
+
+void InsertionSort::sortArray()
+{
+    int i = 0, j = 0, k = 0, currElement, tmp;
+    
+    cout << "Insertion sort...\n";
+    for (i = 1; i < size; ++i) {
+        currElement = array[i];
+        for (j = (i - 1); j >= 0; --j) {
+            if (currElement < array[j]) {
+                tmp = array[j];
+                array[j] = currElement;
+                array[j+1] = tmp;
+            }
+        }
+    }
+    return;
+}
 /* Main */
 int main()
 {
@@ -126,6 +158,7 @@ int main()
     cout << "****************************************\n";
     cout << "1. Bubble Sort\n";
     cout << "2. Selection Sort\n";
+    cout << "3. Insertion Sort\n";
     cout << "****************************************\n";
     cin >> choice;
 
@@ -145,6 +178,16 @@ int main()
     {
         SelectionSort ss(8);
         s = &ss;
+        s->getArray();
+        s->sortArray();
+        s->display();
+        break;
+    }
+    case 3: 
+        /* Insertion Sort */
+    {
+        InsertionSort Is(8);
+        s = &Is;
         s->getArray();
         s->sortArray();
         s->display();
