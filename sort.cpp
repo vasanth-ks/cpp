@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <limits.h>
 
 using namespace std;
 
@@ -37,7 +38,6 @@ void Sort::getArray()
     }
     return;
 }
-
 void Sort::display()
 {
     vector <int>::iterator it;
@@ -80,18 +80,80 @@ void BubbleSort::sortArray()
     }
     return;
 }
+
+/* Selection sort */
+class SelectionSort : public Sort
+{
+    public:
+        SelectionSort(int n) : Sort(n)
+        {
+            cout << "Initializing the array size in Selection sort constructor\n";
+        }
+        void sortArray();
+        ~SelectionSort()
+        {
+            cout << "Selection sort destructor\n";
+        }
+};
+void SelectionSort::sortArray()
+{
+    int i = 0, j = 0, min = INT_MAX, tmp = 0, min_pos = -1;
+    
+    cout << "Selection Sort...\n";
+    for (i = 0; i < size; ++i) {
+        for (j = i; j < size; ++j) {
+            if (array[j] < min) {
+                min = array[j];
+                min_pos = j;
+            }
+        }
+        tmp = array[i];
+        array[i] = min;
+        array[min_pos] = tmp;
+        min = INT_MAX;
+        min_pos = -1;
+    }
+    return;
+}
+
+/* Main */
 int main()
 {
-    int i = 0, in = 0;
+    int i = 0, in = 0, choice = -1;
     Sort *s;
 
-    /* Bubble Sort */
-    BubbleSort bs(9);
-    s = &bs;
-    s->getArray();
-    s->sortArray();
-    s->display();
-    /* Bubble Sort */
+    cout << "Choose the type of sorting algorithm:\n";
+    cout << "****************************************\n";
+    cout << "1. Bubble Sort\n";
+    cout << "2. Selection Sort\n";
+    cout << "****************************************\n";
+    cin >> choice;
 
+    switch(choice) {
+    case 1:
+        /* Bubble Sort */
+    {
+        BubbleSort bs(8);
+        s = &bs;
+        s->getArray();
+        s->sortArray();
+        s->display();
+        break;
+    }
+    case 2:
+        /* Selection Sort */
+    {
+        SelectionSort ss(8);
+        s = &ss;
+        s->getArray();
+        s->sortArray();
+        s->display();
+        break;
+    }
+    default:
+        cout << "Invalid option\n";
+        exit(-1);
+    }
+    
     return 0;
 }
