@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ void DepthFirstSearch(Node *root)
     queue <Node *> q;
 
     if (!root) {
+        cout << "Tree is empty\n";
         return;
     }
     cout << "Depth First Search...\n";
@@ -81,21 +83,57 @@ void InOrderTraversal(Node* root)
     return;
 }
 
+void IterativeInOrderTraversal(Node* root)
+{
+    Node* curr = NULL;
+    stack <Node *> s;
+
+    if (!root) {
+        cout << "Tree is empty\n";
+        return;
+    }
+    curr = root;
+    s.push(curr);
+    cout << "Iterative In-order traversal...\n";
+    while (!s.empty()) {
+        while (curr) {
+            if (curr->left) {
+                s.push(curr->left);
+            }
+            curr = curr->left;
+        }
+        curr = s.top();
+        s.pop();
+        cout << curr->data << " ";
+        curr = curr->right;
+        if (curr) {
+            s.push(curr);
+        }
+    }
+    cout << endl;
+    return;
+}
+
 int main()
 {
     Node* r = NULL;
 
-    r = insert(r, 33);
-    r = insert(r, 21);
-    r = insert(r, 35);
+    r = insert(r, 15);
+    r = insert(r, 10);
+    r = insert(r, 5);
+    r = insert(r, 1);
+    r = insert(r, 7);
+    r = insert(r, 8);
     r = insert(r, 20);
+    r = insert(r, 17);
     r = insert(r, 25);
-    r = insert(r, 34);
-    r = insert(r, 55);
+    r = insert(r, 21);
+    r = insert(r, 26);
     
     cout << "In-order traversal...\n";
     InOrderTraversal(r);
     cout << endl;
+    IterativeInOrderTraversal(r);
     DepthFirstSearch(r);
     return 0;
 }
