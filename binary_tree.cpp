@@ -41,7 +41,7 @@ Node* insert(Node *root, int value)
     }
     return root;
 }
-void DepthFirstSearch(Node *root) 
+void BreadthFirstSearch(Node *root) 
 {
     Node* curr = NULL;
     queue <Node *> q;
@@ -50,7 +50,7 @@ void DepthFirstSearch(Node *root)
         cout << "Tree is empty\n";
         return;
     }
-    cout << "Depth First Search...\n";
+    cout << "Breadth First Search...\n";
     q.push(root);
     while (!q.empty()) {
         curr = q.front();
@@ -130,10 +130,10 @@ int main()
     r = insert(r, 21);
     r = insert(r, 26);
     
+    IterativeInOrderTraversal(r);
     cout << "In-order traversal...\n";
     InOrderTraversal(r);
     cout << endl;
-    IterativeInOrderTraversal(r);
-    DepthFirstSearch(r);
+    BreadthFirstSearch(r);
     return 0;
 }
