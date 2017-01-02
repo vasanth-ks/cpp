@@ -114,6 +114,31 @@ void IterativeInOrderTraversal(Node* root)
     return;
 }
 
+bool checkSubtree (Node* root, int min, int max)
+{
+    bool isBST = true;
+    if (!root) {
+        return true;
+    }
+
+    if (root->data <= min || root->data >= max) {
+        return false;
+    }
+
+    isBST = checkSubtree(root->left, min, root->data);
+    if (!isBST) {
+        return isBST;
+    }
+    isBST = checkSubtree(root->right, root->data, max);
+    return isBST;
+
+}
+
+bool checkBST (Node* root)
+{
+    return checkSubtree(root, INT_MIN, INT_MAX);
+}
+
 int main()
 {
     Node* r = NULL;
@@ -135,5 +160,6 @@ int main()
     InOrderTraversal(r);
     cout << endl;
     BreadthFirstSearch(r);
+    cout << "Binary Search Tree: " << checkBST(r)  << endl;
     return 0;
 }
