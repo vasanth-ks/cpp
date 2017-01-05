@@ -29,8 +29,8 @@ def numberOfDeletions(a, b):
             del dictB[la]
     '''
         These lists contain the characters that are not common to both the strings.
-        Convert these characters to list and iterate over them to get the count
-        their occurrences and include them for deletion.
+        Convert these characters to list and iterate over them to count their
+        occurrences and include them for deletion.
     '''
     listA = dictA.keys()
     listB = dictB.keys()
