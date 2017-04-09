@@ -26,17 +26,14 @@
 
 int main()
 {
-    unsigned int left_map[26], right_map[26], n_test = 5, i = 0, j = 0, mid = 0, n = 0;
+    unsigned int left_map[26], n_test = 5, i = 0, j = 0, n = 0;
     char in[100];
     bool double_string = false;
-    //memset(left_map, 0, sizeof(left_map));
-    //memset(right_map, 0, sizeof(right_map));
     scanf("%u", &n_test);
     for (n = 0; n < n_test; ++n) {
         scanf("%s", in);
         double_string = false;
         memset(left_map, 0, sizeof(left_map));
-        //memset(right_map, 0, sizeof(right_map));
         for (j = 0; j < strlen(in); ++j) {
             left_map[in[j] - 'a']++;
         }
