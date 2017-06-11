@@ -53,21 +53,36 @@ void find_max (string &a, string &b)
     return;
 }
 
+string strip_string(string s)
+{
+    size_t pos = s.find_first_not_of('0', 0);
+
+    if (pos > 0 && pos < s.length()) {
+        s.erase(0, pos);
+    } else if (pos > s.length()) {
+        s.erase(0, (s.length() - 1));
+    }
+
+    return s;
+}
+
 string subtract (string a, string b)
 {
-    //string out;
+    string out;
     int a_size = a.length(), b_size = b.length(), borrow = 0, diff = 0;
+    size_t pos;
 
     if (a_size > b_size) {
         b = make_equal(b, (a_size - b_size));
     } else if (b_size > a_size) {
         a = make_equal(a, (b_size - a_size));
     }
-    char out_str[a_size];
+    size_t size = a.size();
+    char out_str[size];
 
     find_max(a, b);
 
-    for (int i = (a_size - 1); i >= 0; --i) {
+    for (int i = (size - 1); i >= 0; --i) {
         diff = (a[i] - '0') - (b[i] - '0') - borrow;
         if (diff < 0) {
             borrow = 1;
@@ -77,8 +92,7 @@ string subtract (string a, string b)
         }
         out_str[i] = (diff + '0');
     }
-    out_str[a_size] = '\0';
-    //cout << a << " - " << b << ": " << out_str << endl;
+    out_str[size] = '\0';
 
     return out_str;
 }
@@ -149,18 +163,18 @@ string recursive_multiplication (string op1, string op2)
     ad = recursive_multiplication(a, d);
     bc = recursive_multiplication(b, c);
     ad_bc = add(ad, bc);
-    //printf("%s: ac %s bd %s (ad+bc) %s\n", __func__, ac.c_str(), bd.c_str(), ad_bc.c_str());
 
     if (n % 2 == 0) {
         ac = power_of_10(ac, n); 
         ad_bc = power_of_10(ad_bc, n1);
-    } else if (n != 1) {
-        ac = power_of_10(ac, n1); 
-        ad_bc = power_of_10(ad_bc, (n1 / 2));
+    } else {
+        ac = power_of_10(ac, (n - 1)); 
+        ad_bc = power_of_10(ad_bc, (n / 2));
     }
 
     res = add(ac, ad_bc);
     res = add(res, bd);
+    res = strip_string(res);
 
     return res;
 }
@@ -170,9 +184,8 @@ string karatsuba_multiplication (string op1, string op2)
     unsigned long n1;
     string a, b, c, d, res, ad_bc, ac, ad, bc, bd, a_b, c_d, p3;
 
-
     if (op1 == "0" || op2 == "0") {
-        return "0";
+        return to_string(0);
     }
     if (op1.length() < op2.length()) {
         op1 = make_equal(op1, (op2.length() - op1.length()));
@@ -185,6 +198,7 @@ string karatsuba_multiplication (string op1, string op2)
     }
 
     size_t n = op1.length();
+
     if (n % 2 == 0) {
         n1 = n / 2;
     } else if (n != 1) {
@@ -203,19 +217,18 @@ string karatsuba_multiplication (string op1, string op2)
     p3 = karatsuba_multiplication(a_b, c_d);
     p3 = subtract(p3, ac);
     p3 = subtract(p3, bd);
-    //printf("%s: ac %s bd %s (ad+bc) %s\n", __func__, ac.c_str(), bd.c_str(), p3.c_str());
 
     if (n % 2 == 0) {
         ac = power_of_10(ac, n); 
         ad_bc = power_of_10(p3, n1);
-    } else if (n != 1) {
-        ac = power_of_10(ac, n1); 
-        ad_bc = power_of_10(p3, (n1 / 2));
+    } else {
+        ac = power_of_10(ac, (n - 1)); 
+        ad_bc = power_of_10(p3, (n / 2));
     }
 
     res = add(ac, ad_bc);
     res = add(res, bd);
-
+    res = strip_string(res);
     return res;
 }
 
@@ -225,17 +238,10 @@ int main()
     char in;
     
     do {
-
         cin >> op1;
         cin >> op2;
-
-        //cout << op1 << " * " << op2 << ": "<< recursive_multiplication(op1, op2) << endl;
-        //cout << op1 << " * " << op2 << ": "<< karatsuba_multiplication(op1, op2) << endl;
         cout << recursive_multiplication(op1, op2) << endl;
         cout << karatsuba_multiplication(op1, op2) << endl;
-        //cout << op1 << " + " << op2 << ": "  << add(op1, op2) << endl;
-        //cout << op1 << " - " << op2 << ": " << subtract(op1, op2) << endl;
-        //subtract(op1, op2);
         cin >> in;
     } while (in != 'q') ;
     return 0;
