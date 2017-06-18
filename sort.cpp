@@ -9,7 +9,7 @@ using namespace std;
 class Sort
 {
     protected:
-        int size;
+        size_t size;
         vector <int> array;
     public:
         Sort(size_t n);
@@ -138,16 +138,89 @@ void InsertionSort::sortArray()
     cout << "Insertion sort...\n";
     for (i = 1; i < size; ++i) {
         currElement = array[i];
-        for (j = (i - 1); j >= 0; --j) {
-            if (currElement < array[j]) {
-                tmp = array[j];
-                array[j] = currElement;
-                array[j+1] = tmp;
-            }
+        j = i - 1;
+        while ((currElement < array[j]) && (j >= 0)) {
+            array[j+1] = array[j];
+            j--;
         }
+        array[j+1] = currElement;
     }
     return;
 }
+/* Merge Sort */
+class MergeSort : public Sort
+{
+    public:
+        MergeSort(int n) : Sort(n)
+        {
+            cout << "Initializing array size in Merge sort constructor\n";
+        }
+        void sortArray();
+        ~MergeSort()
+        {
+            cout << "Merge sort destructor\n";
+        }
+    private:
+        void mergeSort(vector <int> &arr);
+        void mergeArray(vector <int> left, vector <int> right, vector <int>
+        &arr);
+};
+
+void MergeSort::sortArray()
+{
+    cout << "Merge sort...\n";
+    mergeSort(array);
+}
+
+void MergeSort::mergeSort(vector <int> &arr)
+{
+    size_t mid = 0;
+    unsigned int i = 0;
+    vector <int> left;
+    vector <int> right;
+
+    mid = arr.size() / 2;
+
+    if (arr.size() <= 1) {
+        return;
+    }
+
+    for (i = 0; i < mid; ++i) {
+        left.push_back(arr[i]);
+    }
+    for (i = mid; i < arr.size(); ++i) {
+        right.push_back(arr[i]);
+    }
+
+    mergeSort(left);
+    mergeSort(right);
+
+    mergeArray(left, right, arr);
+
+    return;
+}
+void MergeSort::mergeArray(vector <int> left, vector <int> right, vector <int> &arr)
+{
+    unsigned int i = 0, j = 0, k = 0;
+
+    while (i < left.size() && j < right.size()) {
+        if (left[i] <= right[j]) {
+            arr[k] = left[i++];
+        } else {
+            arr[k] = right[j++];
+        }
+        k++;
+    }
+
+    while (i < left.size()) {
+        arr[k++] = left[i++];
+    }
+    while (j < right.size()) {
+        arr[k++] = right[j++];
+    }
+    return;
+}
+
 /* Main */
 int main()
 {
@@ -159,6 +232,7 @@ int main()
     cout << "1. Bubble Sort\n";
     cout << "2. Selection Sort\n";
     cout << "3. Insertion Sort\n";
+    cout << "4. Merge Sort\n";
     cout << "****************************************\n";
     cin >> choice;
 
@@ -171,6 +245,7 @@ int main()
         s->getArray();
         s->sortArray();
         s->display();
+        cout << "Object type: " << typeid(bs).name() << endl;
         break;
     }
     case 2:
@@ -186,8 +261,18 @@ int main()
     case 3: 
         /* Insertion Sort */
     {
-        InsertionSort Is(8);
+        InsertionSort Is(7);
         s = &Is;
+        s->getArray();
+        s->sortArray();
+        s->display();
+        break;
+    }
+    case 4: 
+        /* Merge Sort */
+    {
+        MergeSort m(8);
+        s = &m;
         s->getArray();
         s->sortArray();
         s->display();
@@ -195,7 +280,7 @@ int main()
     }
     default:
         cout << "Invalid option\n";
-        exit(-1);
+        break;
     }
     
     return 0;
