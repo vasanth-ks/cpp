@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <limits.h>
 
 using namespace std;
 
@@ -41,7 +42,8 @@ Node* insert(Node *root, int value)
     }
     return root;
 }
-void BreadthFirstSearch(Node *root) 
+
+void BreadthFirstSearch(Node *root)
 {
     Node* curr = NULL;
     queue <Node *> q;
@@ -76,7 +78,7 @@ void InOrderTraversal(Node* root)
         return;
     }
     curr = root;
-    
+
     InOrderTraversal(curr->left);
     cout << curr->data << " ";
     InOrderTraversal(curr->right);
@@ -139,6 +141,19 @@ bool checkBST (Node* root)
     return checkSubtree(root, INT_MIN, INT_MAX);
 }
 
+Node* invertTree (Node *root)
+{
+    Node *tmp = root;
+    if (root) {
+        tmp = root->left;
+        root->left = root->right;
+        root->right = tmp;
+        invertTree(root->left);
+        invertTree(root->right);
+    }
+    return root;
+}
+
 int main()
 {
     Node* r = NULL;
@@ -154,12 +169,19 @@ int main()
     r = insert(r, 25);
     r = insert(r, 21);
     r = insert(r, 26);
-    
+
     IterativeInOrderTraversal(r);
     cout << "In-order traversal...\n";
     InOrderTraversal(r);
     cout << endl;
+
     BreadthFirstSearch(r);
+
     cout << "Binary Search Tree: " << checkBST(r)  << endl;
+
+    cout << "Binary tree after inverting the node...\n";
+    r = invertTree(r);
+    InOrderTraversal(r);
+
     return 0;
 }
